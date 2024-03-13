@@ -3,7 +3,7 @@ package com.example.hogwarts.model.repository.impl;
 import com.example.hogwarts.model.entity.Faculty;
 import com.example.hogwarts.model.entity.Teacher;
 import com.example.hogwarts.model.repository.TeacherRepo;
-import com.example.hogwarts.util.DataSource;
+import com.example.hogwarts.config.DataSource;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.hogwarts.util;
+package com.example.hogwarts.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;

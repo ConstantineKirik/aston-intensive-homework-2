@@ -2,7 +2,7 @@ package com.example.hogwarts.model.repository.impl;
 
 import com.example.hogwarts.model.entity.Student;
 import com.example.hogwarts.model.entity.Teacher;
-import com.example.hogwarts.util.DataSource;
+import com.example.hogwarts.config.DataSource;
 import com.example.hogwarts.model.repository.FacultyRepo;
 import com.example.hogwarts.model.entity.Faculty;
 

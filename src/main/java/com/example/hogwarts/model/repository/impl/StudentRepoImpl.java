@@ -2,7 +2,7 @@ package com.example.hogwarts.model.repository.impl;
 
 import com.example.hogwarts.model.entity.Student;
 import com.example.hogwarts.model.repository.StudentRepo;
-import com.example.hogwarts.util.DataSource;
+import com.example.hogwarts.config.DataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ public class StudentRepoImpl implements StudentRepo {
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                    resultSet.next();
                     student = Student.builder()
                             .id(resultSet.getInt("id"))
                             .firstName(resultSet.getString("first_name"))
