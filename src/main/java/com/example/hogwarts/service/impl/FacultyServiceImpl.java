@@ -20,32 +20,32 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public FacultyDTO getByID(Integer id) {
-        return FacultyMapper.INSTANCE.toDto(facultyRepo.findByID(id));
+        return FacultyMapper.FACULTY_MAPPER.toDto(facultyRepo.findByID(id));
     }
 
     @Override
     public List<FacultyDTO> getALl() {
-        return FacultyMapper.INSTANCE.toListDto(facultyRepo.findAll());
+        return FacultyMapper.FACULTY_MAPPER.toListDto(facultyRepo.findAll());
     }
 
     @Override
     public List<TeacherDTO> getTeachersByFaculty(FacultyDTO facultyDTO) {
-        return TeacherMapper.INSTANCE.toListDto(facultyRepo.getTeachersByFaculty(FacultyMapper.INSTANCE.toEntity(facultyDTO)));
+        return TeacherMapper.TEACHER_MAPPER.toListDto(facultyRepo.getTeachersByFaculty(FacultyMapper.FACULTY_MAPPER.toEntity(facultyDTO)));
     }
 
     @Override
     public List<StudentDTO> getStudentsByFaculty(FacultyDTO facultyDTO) {
-        return StudentMapper.INSTANCE.toListDto(facultyRepo.getStudentsByFaculty(FacultyMapper.INSTANCE.toEntity(facultyDTO)));
+        return StudentMapper.STUDENT_MAPPER.toListDto(facultyRepo.getStudentsByFaculty(FacultyMapper.FACULTY_MAPPER.toEntity(facultyDTO)));
     }
 
     @Override
     public void save(FacultyDTO dto) {
-        facultyRepo.save(FacultyMapper.INSTANCE.toEntity(dto));
+        facultyRepo.save(FacultyMapper.FACULTY_MAPPER.toEntity(dto));
     }
 
     @Override
     public void update(FacultyDTO dto) {
-        facultyRepo.update(FacultyMapper.INSTANCE.toEntity(dto));
+        facultyRepo.update(FacultyMapper.FACULTY_MAPPER.toEntity(dto));
     }
 
     @Override

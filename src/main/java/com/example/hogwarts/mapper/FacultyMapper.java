@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface FacultyMapper {
-    FacultyMapper INSTANCE = Mappers.getMapper(FacultyMapper.class);
+    FacultyMapper FACULTY_MAPPER = Mappers.getMapper(FacultyMapper.class);
 
     FacultyDTO toDto(Faculty faculty);
 

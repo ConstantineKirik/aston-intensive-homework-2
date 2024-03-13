@@ -15,22 +15,22 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDTO getByID(Integer id) {
-        return StudentMapper.INSTANCE.toDto(studentRepo.findByID(id));
+        return StudentMapper.STUDENT_MAPPER.toDto(studentRepo.findByID(id));
     }
 
     @Override
     public List<StudentDTO> getALl() {
-        return StudentMapper.INSTANCE.toListDto(studentRepo.findAll());
+        return StudentMapper.STUDENT_MAPPER.toListDto(studentRepo.findAll());
     }
 
     @Override
     public void save(StudentDTO dto) {
-        studentRepo.save(StudentMapper.INSTANCE.toEntity(dto));
+        studentRepo.save(StudentMapper.STUDENT_MAPPER.toEntity(dto));
     }
 
     @Override
     public void update(StudentDTO dto) {
-        studentRepo.update(StudentMapper.INSTANCE.toEntity(dto));
+        studentRepo.update(StudentMapper.STUDENT_MAPPER.toEntity(dto));
     }
 
     @Override
