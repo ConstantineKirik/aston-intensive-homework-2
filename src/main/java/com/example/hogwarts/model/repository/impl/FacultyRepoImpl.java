@@ -13,7 +13,7 @@ import java.util.List;
 public class FacultyRepoImpl implements FacultyRepo {
 
     @Override
-    public Faculty get(Integer id) {
+    public Faculty findByID(Integer id) {
 
         Faculty faculty = null;
 
@@ -40,7 +40,7 @@ public class FacultyRepoImpl implements FacultyRepo {
     }
 
     @Override
-    public List<Faculty> getALl() {
+    public List<Faculty> findAll() {
 
         List<Faculty> faculties = new ArrayList<>();
 
@@ -69,7 +69,7 @@ public class FacultyRepoImpl implements FacultyRepo {
 
         List<Teacher> teachers = new ArrayList<>();
 
-        String selectQuery = "SELECT * FROM teahers t JOIN faculties_teachers ft ON t.id = ft.teacher_id WHERE ft.faculty_id = ?";
+        String selectQuery = "SELECT * FROM teachers t JOIN faculties_teachers ft ON t.id = ft.teacher_id WHERE ft.faculty_id = ?";
 
         try (Connection connection = DataSource.getInstance().getConnection()) {
 

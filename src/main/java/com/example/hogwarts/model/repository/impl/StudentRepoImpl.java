@@ -11,7 +11,7 @@ import java.util.List;
 public class StudentRepoImpl implements StudentRepo {
 
     @Override
-    public Student get(Integer id) {
+    public Student findByID(Integer id) {
 
         Student student = null;
 
@@ -40,7 +40,7 @@ public class StudentRepoImpl implements StudentRepo {
     }
 
     @Override
-    public List<Student> getALl() {
+    public List<Student> findAll() {
 
         List<Student> students = new ArrayList<>();
 

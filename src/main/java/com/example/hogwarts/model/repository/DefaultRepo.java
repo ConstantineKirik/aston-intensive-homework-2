@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface DefaultRepo<T> {
 
-    T get(Integer id);
+    T findByID(Integer id);
 
-    List<T> getALl();
+    List<T> findAll();
 
     void save(T entity);
 

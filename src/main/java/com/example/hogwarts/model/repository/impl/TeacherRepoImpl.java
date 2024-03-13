@@ -4,17 +4,15 @@ import com.example.hogwarts.model.entity.Faculty;
 import com.example.hogwarts.model.entity.Teacher;
 import com.example.hogwarts.model.repository.TeacherRepo;
 import com.example.hogwarts.util.DataSource;
-import lombok.RequiredArgsConstructor;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
 public class TeacherRepoImpl implements TeacherRepo {
 
     @Override
-    public Teacher get(Integer id) {
+    public Teacher findByID(Integer id) {
 
         Teacher teacher = null;
 
@@ -42,7 +40,7 @@ public class TeacherRepoImpl implements TeacherRepo {
     }
 
     @Override
-    public List<Teacher> getALl() {
+    public List<Teacher> findAll() {
 
         List<Teacher> teachers = new ArrayList<>();
 
@@ -67,7 +65,7 @@ public class TeacherRepoImpl implements TeacherRepo {
     }
 
     @Override
-    public List<Faculty> getFacultiesByTeacher(Teacher teacher) {
+    public List<Faculty> findFacultiesByTeacher(Teacher teacher) {
 
         List<Faculty> faculties = new ArrayList<>();
 
