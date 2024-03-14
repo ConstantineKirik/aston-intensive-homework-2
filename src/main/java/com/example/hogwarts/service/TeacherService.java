@@ -9,5 +9,5 @@ public interface TeacherService extends DefaultService<TeacherDTO> {
 
     void addTeacherToFaculty(FacultyDTO facultyDTO, TeacherDTO teacherDTO);
 
-    List<FacultyDTO> findFacultiesByTeacher(TeacherDTO teacherDTO);
+    List<FacultyDTO> getFacultiesByTeacher(TeacherDTO teacherDTO);
 }

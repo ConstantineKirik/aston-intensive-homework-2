@@ -16,12 +16,41 @@ public class TeacherRepoImpl implements TeacherRepo {
 
         Teacher teacher = null;
 
-        String selectQuery = "SELECT * FROM techers WHERE id = ?";
+        String selectQuery = "SELECT * FROM teachers WHERE id = ?";
 
         try (Connection connection = DataSource.getInstance().getConnection()) {
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
                 preparedStatement.setInt(1, id);
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                    resultSet.next();
+                    teacher = Teacher.builder()
+                            .id(resultSet.getInt("id"))
+                            .firstName(resultSet.getString("first_name"))
+                            .lastName(resultSet.getString("last_name"))
+                            .build();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return teacher;
+    }
+
+    @Override
+    public Teacher findByFirstNameAndLastName(Teacher entity) {
+
+        Teacher teacher = null;
+
+        String selectQuery = "SELECT * FROM teachers WHERE first_name = ? AND last_name = ?";
+
+        try (Connection connection = DataSource.getInstance().getConnection()) {
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                preparedStatement.setString(1, entity.getFirstName());
+                preparedStatement.setString(2, entity.getLastName());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -73,7 +102,7 @@ public class TeacherRepoImpl implements TeacherRepo {
 
         try (Connection connection = DataSource.getInstance().getConnection()) {
 
-            try(PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
                 preparedStatement.setInt(1, teacher.getId());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -94,7 +123,13 @@ public class TeacherRepoImpl implements TeacherRepo {
     }
 
     @Override
-    public void save(Teacher entity) {
+    public boolean save(Teacher entity) {
+
+        Teacher teacherFromDB = this.findByFirstNameAndLastName(entity);
+
+        if (teacherFromDB != null) {
+            return false;
+        }
 
         String insertQuery = "INSERT INTO teachers (first_name, last_name) VALUES (?, ?)";
 
@@ -108,6 +143,7 @@ public class TeacherRepoImpl implements TeacherRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 
     @Override
@@ -115,8 +151,8 @@ public class TeacherRepoImpl implements TeacherRepo {
 
         String insertQuery = "INSERT INTO faculties_teachers (faculty_id, teacher_id) VALUES (?, ?)";
 
-        try(Connection connection = DataSource.getInstance().getConnection();
-        PreparedStatement insertPreparedStatement = connection.prepareStatement(insertQuery)){
+        try (Connection connection = DataSource.getInstance().getConnection();
+             PreparedStatement insertPreparedStatement = connection.prepareStatement(insertQuery)) {
 
             insertPreparedStatement.setInt(1, faculty.getId());
             insertPreparedStatement.setInt(2, teacher.getId());
@@ -128,7 +164,13 @@ public class TeacherRepoImpl implements TeacherRepo {
     }
 
     @Override
-    public void update(Teacher entity) {
+    public boolean update(Teacher entity) {
+
+        Teacher teacherFromDB = this.findByFirstNameAndLastName(entity);
+
+        if (teacherFromDB != null) {
+            return false;
+        }
 
         String updateQuery = "UPDATE teachers SET first_name=?, last_name=? WHERE id=?";
 
@@ -137,16 +179,23 @@ public class TeacherRepoImpl implements TeacherRepo {
 
             updatePreparedStatement.setString(1, entity.getFirstName());
             updatePreparedStatement.setString(2, entity.getLastName());
-            updatePreparedStatement.setInt(4, entity.getId());
+            updatePreparedStatement.setInt(3, entity.getId());
             updatePreparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
+
+        Teacher teacherFromDB = this.findByID(id);
+
+        if (teacherFromDB != null) {
+            return false;
+        }
 
         String deleteQuery = "DELETE FROM teachers WHERE id=?";
 
@@ -159,5 +208,6 @@ public class TeacherRepoImpl implements TeacherRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 }

@@ -40,6 +40,33 @@ public class FacultyRepoImpl implements FacultyRepo {
     }
 
     @Override
+    public Faculty findByTitle(Faculty entity) {
+
+        Faculty faculty = null;
+
+        String selectQuery = "SELECT * FROM faculties WHERE title = ?";
+
+        try (Connection connection = DataSource.getInstance().getConnection()) {
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                preparedStatement.setString(1, entity.getTitle());
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                    resultSet.next();
+                    faculty = Faculty.builder()
+                            .id(resultSet.getInt("id"))
+                            .title(resultSet.getString("title"))
+                            .build();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return faculty;
+    }
+
+    @Override
     public List<Faculty> findAll() {
 
         List<Faculty> faculties = new ArrayList<>();
@@ -65,7 +92,7 @@ public class FacultyRepoImpl implements FacultyRepo {
     }
 
     @Override
-    public List<Teacher> getTeachersByFaculty(Faculty faculty) {
+    public List<Teacher> findTeachersByFaculty(Faculty faculty) {
 
         List<Teacher> teachers = new ArrayList<>();
 
@@ -95,7 +122,7 @@ public class FacultyRepoImpl implements FacultyRepo {
     }
 
     @Override
-    public List<Student> getStudentsByFaculty(Faculty faculty) {
+    public List<Student> findStudentsByFaculty(Faculty faculty) {
 
         List<Student> students = new ArrayList<>();
 
@@ -126,7 +153,13 @@ public class FacultyRepoImpl implements FacultyRepo {
     }
 
     @Override
-    public void save(Faculty entity) {
+    public boolean save(Faculty entity) {
+
+        Faculty facultyFromDB = this.findByTitle(entity);
+
+        if (facultyFromDB != null) {
+            return false;
+        }
 
         String insertQuery = "INSERT INTO faculties (title) VALUES (?)";
 
@@ -139,12 +172,19 @@ public class FacultyRepoImpl implements FacultyRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 
     @Override
-    public void update(Faculty entity) {
+    public boolean update(Faculty entity) {
 
-        String updateQuery = "UPDATE faculties SET title=? WHERE id=?";
+        Faculty facultyFromDB = this.findByTitle(entity);
+
+        if (facultyFromDB == null) {
+            return false;
+        }
+
+        String updateQuery = "UPDATE faculties SET title = ? WHERE id = ?";
 
         try (Connection connection = DataSource.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(updateQuery)) {
@@ -156,12 +196,19 @@ public class FacultyRepoImpl implements FacultyRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
-        String deleteQuery = "DELETE FROM faculties WHERE id=?";
+        Faculty facultyFromDB = this.findByID(id);
+
+        if (facultyFromDB == null) {
+            return false;
+        }
+
+        String deleteQuery = "DELETE FROM faculties WHERE id = ?";
 
         try (Connection connection = DataSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
@@ -172,5 +219,6 @@ public class FacultyRepoImpl implements FacultyRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 }

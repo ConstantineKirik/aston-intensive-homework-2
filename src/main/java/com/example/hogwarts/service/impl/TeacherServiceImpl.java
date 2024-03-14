@@ -26,13 +26,13 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<FacultyDTO> findFacultiesByTeacher(TeacherDTO teacherDTO) {
+    public List<FacultyDTO> getFacultiesByTeacher(TeacherDTO teacherDTO) {
         return FacultyMapper.FACULTY_MAPPER.toListDto(teacherRepo.findFacultiesByTeacher(TeacherMapper.TEACHER_MAPPER.toEntity(teacherDTO)));
     }
 
     @Override
-    public void save(TeacherDTO dto) {
-        teacherRepo.save(TeacherMapper.TEACHER_MAPPER.toEntity(dto));
+    public boolean create(TeacherDTO dto) {
+        return teacherRepo.save(TeacherMapper.TEACHER_MAPPER.toEntity(dto));
     }
 
     @Override
@@ -41,12 +41,12 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void update(TeacherDTO dto) {
-        teacherRepo.update(TeacherMapper.TEACHER_MAPPER.toEntity(dto));
+    public boolean update(TeacherDTO dto) {
+        return teacherRepo.update(TeacherMapper.TEACHER_MAPPER.toEntity(dto));
     }
 
     @Override
-    public void delete(Integer id) {
-        teacherRepo.delete(id);
+    public boolean remove(Integer id) {
+        return teacherRepo.delete(id);
     }
 }

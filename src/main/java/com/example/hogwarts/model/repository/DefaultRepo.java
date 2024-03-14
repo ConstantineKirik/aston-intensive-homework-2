@@ -8,9 +8,9 @@ public interface DefaultRepo<T> {
 
     List<T> findAll();
 
-    void save(T entity);
+    boolean save(T entity);
 
-    void update(T entity);
+    boolean update(T entity);
 
-    void delete(Integer id);
+    boolean delete(Integer id);
 }

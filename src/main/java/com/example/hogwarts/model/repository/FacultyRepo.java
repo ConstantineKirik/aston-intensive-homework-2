@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface FacultyRepo extends DefaultRepo<Faculty> {
 
-    List<Teacher> getTeachersByFaculty(Faculty faculty);
+    Faculty findByTitle(Faculty faculty);
 
-    List<Student> getStudentsByFaculty(Faculty faculty);
+    List<Teacher> findTeachersByFaculty(Faculty faculty);
+
+    List<Student> findStudentsByFaculty(Faculty faculty);
 }

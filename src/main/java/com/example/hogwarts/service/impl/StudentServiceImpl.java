@@ -24,17 +24,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void save(StudentDTO dto) {
-        studentRepo.save(StudentMapper.STUDENT_MAPPER.toEntity(dto));
+    public boolean create(StudentDTO dto) {
+        return studentRepo.save(StudentMapper.STUDENT_MAPPER.toEntity(dto));
     }
 
     @Override
-    public void update(StudentDTO dto) {
-        studentRepo.update(StudentMapper.STUDENT_MAPPER.toEntity(dto));
+    public boolean update(StudentDTO dto) {
+        return studentRepo.update(StudentMapper.STUDENT_MAPPER.toEntity(dto));
     }
 
     @Override
-    public void delete(Integer id) {
-        studentRepo.delete(id);
+    public boolean remove(Integer id) {
+        return studentRepo.delete(id);
     }
 }

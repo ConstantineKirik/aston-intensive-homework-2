@@ -19,7 +19,7 @@ public class StudentRepoImpl implements StudentRepo {
 
         try (Connection connection = DataSource.getInstance().getConnection()) {
 
-            try(PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
                 preparedStatement.setInt(1, id);
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -29,6 +29,34 @@ public class StudentRepoImpl implements StudentRepo {
                             .firstName(resultSet.getString("first_name"))
                             .lastName(resultSet.getString("last_name"))
                             .facultyId(resultSet.getInt("faculty_id"))
+                            .build();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return student;
+    }
+
+    @Override
+    public Student findByFirstNameAndLastName(Student entity) {
+
+        Student student = null;
+
+        String selectQuery = "SELECT * FROM students WHERE first_name = ? AND last_name = ?";
+
+        try (Connection connection = DataSource.getInstance().getConnection()) {
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                preparedStatement.setString(1, entity.getFirstName());
+                preparedStatement.setString(2, entity.getLastName());
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                    student = Student.builder()
+                            .id(resultSet.getInt("id"))
+                            .firstName(resultSet.getString("first_name"))
+                            .lastName(resultSet.getString("last_name"))
                             .build();
                 }
             }
@@ -65,7 +93,13 @@ public class StudentRepoImpl implements StudentRepo {
     }
 
     @Override
-    public void save(Student entity) {
+    public boolean save(Student entity) {
+
+        Student studentFromDB = this.findByFirstNameAndLastName(entity);
+
+        if (studentFromDB != null) {
+            return false;
+        }
 
         String insertQuery = "INSERT INTO students (first_name, last_name, faculty_id) VALUES (?, ?, ?)";
 
@@ -80,10 +114,17 @@ public class StudentRepoImpl implements StudentRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 
     @Override
-    public void update(Student entity) {
+    public boolean update(Student entity) {
+
+        Student studentFromDB = this.findByFirstNameAndLastName(entity);
+
+        if (studentFromDB == null) {
+            return false;
+        }
 
         String updateQuery = "UPDATE students SET first_name=?, last_name=?, faculty_id=? WHERE id=?";
 
@@ -99,10 +140,17 @@ public class StudentRepoImpl implements StudentRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
+
+        Student studentFromDB = this.findByID(id);
+
+        if (studentFromDB != null) {
+            return false;
+        }
 
         String deleteQuery = "DELETE FROM students WHERE id=?";
 
@@ -115,5 +163,6 @@ public class StudentRepoImpl implements StudentRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return true;
     }
 }

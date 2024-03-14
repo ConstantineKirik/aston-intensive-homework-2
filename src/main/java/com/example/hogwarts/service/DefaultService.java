@@ -8,9 +8,9 @@ public interface DefaultService<T> {
 
     List<T> getALl();
 
-    void save(T dto);
+    boolean create(T dto);
 
-    void update(T dto);
+    boolean update(T dto);
 
-    void delete(Integer id);
+    boolean remove(Integer id);
 }

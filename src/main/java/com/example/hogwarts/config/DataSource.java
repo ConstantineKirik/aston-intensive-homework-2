@@ -14,7 +14,7 @@ public class DataSource {
 
     private DataSource(){
         properties = new Properties();
-        try (InputStream input = new FileInputStream("src/main/resources/db.properties")){
+        try (InputStream input = new FileInputStream("src/main/resources/db/db.properties")){
             properties.load(input);
         } catch (IOException e) {
             throw new RuntimeException(e);

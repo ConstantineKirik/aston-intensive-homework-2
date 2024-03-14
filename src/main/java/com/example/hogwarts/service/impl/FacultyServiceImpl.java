@@ -30,26 +30,26 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public List<TeacherDTO> getTeachersByFaculty(FacultyDTO facultyDTO) {
-        return TeacherMapper.TEACHER_MAPPER.toListDto(facultyRepo.getTeachersByFaculty(FacultyMapper.FACULTY_MAPPER.toEntity(facultyDTO)));
+        return TeacherMapper.TEACHER_MAPPER.toListDto(facultyRepo.findTeachersByFaculty(FacultyMapper.FACULTY_MAPPER.toEntity(facultyDTO)));
     }
 
     @Override
     public List<StudentDTO> getStudentsByFaculty(FacultyDTO facultyDTO) {
-        return StudentMapper.STUDENT_MAPPER.toListDto(facultyRepo.getStudentsByFaculty(FacultyMapper.FACULTY_MAPPER.toEntity(facultyDTO)));
+        return StudentMapper.STUDENT_MAPPER.toListDto(facultyRepo.findStudentsByFaculty(FacultyMapper.FACULTY_MAPPER.toEntity(facultyDTO)));
     }
 
     @Override
-    public void save(FacultyDTO dto) {
-        facultyRepo.save(FacultyMapper.FACULTY_MAPPER.toEntity(dto));
+    public boolean create(FacultyDTO dto) {
+        return facultyRepo.save(FacultyMapper.FACULTY_MAPPER.toEntity(dto));
     }
 
     @Override
-    public void update(FacultyDTO dto) {
-        facultyRepo.update(FacultyMapper.FACULTY_MAPPER.toEntity(dto));
+    public boolean update(FacultyDTO dto) {
+        return facultyRepo.update(FacultyMapper.FACULTY_MAPPER.toEntity(dto));
     }
 
     @Override
-    public void delete(Integer id) {
-        facultyRepo.delete(id);
+    public boolean remove(Integer id) {
+        return facultyRepo.delete(id);
     }
 }
