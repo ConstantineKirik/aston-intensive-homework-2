@@ -2,7 +2,6 @@ package com.example.hogwarts.service;
 
 import com.example.hogwarts.dto.StudentDTO;
 import com.example.hogwarts.mapper.StudentMapper;
-import com.example.hogwarts.model.entity.Student;
 import com.example.hogwarts.model.repository.StudentRepo;
 import com.example.hogwarts.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,20 +29,28 @@ public class StudentServiceTest {
 
     @Test
     void getByIdTest() {
-        Student expectedStudent = StudentMapper.STUDENT_MAPPER.toEntity(studentDTO);
-        Mockito.when(studentRepo.findByID(Mockito.anyInt())).thenReturn(expectedStudent);
+        Mockito.when(studentRepo.findByID(Mockito.anyInt())).thenReturn(StudentMapper.STUDENT_MAPPER.toEntity(studentDTO));
 
-        Student actualStudent = StudentMapper.STUDENT_MAPPER.toEntity(studentService.getByID(1));
+        StudentDTO actualStudentDTO = studentService.getByID(1);
 
-        assertEquals(expectedStudent, actualStudent);
+        assertEquals(studentDTO, actualStudentDTO);
+    }
+
+    @Test
+    void getByIdNullTest() {
+        Mockito.when(studentRepo.findByID(Mockito.anyInt())).thenReturn(null);
+
+        StudentDTO actualStudentDTO = studentService.getByID(1);
+
+        assertNull(actualStudentDTO);
     }
 
     @Test
     void getAllTest() {
-        List<Student> expectedStudents = new ArrayList<>();
-        Mockito.when(studentRepo.findAll()).thenReturn(expectedStudents);
+        List<StudentDTO> expectedStudents = new ArrayList<>();
+        Mockito.when(studentRepo.findAll()).thenReturn(StudentMapper.STUDENT_MAPPER.toListEntity(expectedStudents));
 
-        List<Student> actualStudents = StudentMapper.STUDENT_MAPPER.toListEntity(studentService.getALl());
+        List<StudentDTO> actualStudents = studentService.getALl();
 
         assertEquals(expectedStudents, actualStudents);
     }
@@ -65,7 +72,7 @@ public class StudentServiceTest {
 
     @Test
     void createFalseTest() {
-        Mockito.when(studentRepo.findByFirstNameAndLastName(Mockito.any())).thenReturn(StudentMapper.STUDENT_MAPPER.toEntity(studentDTO));
+        Mockito.when(studentRepo.save(Mockito.any())).thenReturn(false);
 
         boolean result = studentService.create(studentDTO);
 
@@ -89,7 +96,7 @@ public class StudentServiceTest {
 
     @Test
     void updateFalseTest() {
-        Mockito.when(studentRepo.findByFirstNameAndLastName(Mockito.any())).thenReturn(null);
+        Mockito.when(studentRepo.update(Mockito.any())).thenReturn(false);
 
         boolean result = studentService.update(studentDTO);
 
@@ -113,7 +120,7 @@ public class StudentServiceTest {
 
     @Test
     void removeFalseTest() {
-        Mockito.when(studentRepo.findByID(Mockito.anyInt())).thenReturn(null);
+        Mockito.when(studentRepo.delete(Mockito.anyInt())).thenReturn(false);
 
         boolean result = studentService.create(studentDTO);
 

@@ -4,8 +4,6 @@ import com.example.hogwarts.dto.FacultyDTO;
 import com.example.hogwarts.dto.TeacherDTO;
 import com.example.hogwarts.mapper.FacultyMapper;
 import com.example.hogwarts.mapper.TeacherMapper;
-import com.example.hogwarts.model.entity.Faculty;
-import com.example.hogwarts.model.entity.Teacher;
 import com.example.hogwarts.model.repository.TeacherRepo;
 import com.example.hogwarts.service.impl.TeacherServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,30 +31,38 @@ public class TeacherServiceTest {
 
     @Test
     void getByIdTest() {
-        Teacher expectedTeacher = TeacherMapper.TEACHER_MAPPER.toEntity(teacherDTO);
-        Mockito.when(teacherRepo.findByID(Mockito.anyInt())).thenReturn(expectedTeacher);
+        Mockito.when(teacherRepo.findByID(Mockito.anyInt())).thenReturn(TeacherMapper.TEACHER_MAPPER.toEntity(teacherDTO));
 
-        Teacher actualTeacher = TeacherMapper.TEACHER_MAPPER.toEntity(teacherService.getByID(1));
+        TeacherDTO actualTeacherDTO = teacherService.getByID(1);
 
-        assertEquals(expectedTeacher, actualTeacher);
+        assertEquals(teacherDTO, actualTeacherDTO);
+    }
+
+    @Test
+    void getByIdNullTest() {
+        Mockito.when(teacherRepo.findByID(Mockito.anyInt())).thenReturn(null);
+
+        TeacherDTO actualTeacherDTO = teacherService.getByID(1);
+
+        assertNull(actualTeacherDTO);
     }
 
     @Test
     void getAllTest() {
-        List<Teacher> expectedTeachers = new ArrayList<>();
-        Mockito.when(teacherRepo.findAll()).thenReturn(expectedTeachers);
+        List<TeacherDTO> expectedTeachers = new ArrayList<>();
+        Mockito.when(teacherRepo.findAll()).thenReturn(TeacherMapper.TEACHER_MAPPER.toListEntity(expectedTeachers));
 
-        List<Teacher> actualTeachers = TeacherMapper.TEACHER_MAPPER.toListEntity(teacherService.getALl());
+        List<TeacherDTO> actualTeachers = teacherService.getALl();
 
         assertEquals(expectedTeachers, actualTeachers);
     }
 
     @Test
     void getFacultiesByTeacherTest() {
-        List<Faculty> expectedTeachers = new ArrayList<>();
-        Mockito.when(teacherRepo.findFacultiesByTeacher(Mockito.any())).thenReturn(expectedTeachers);
+        List<FacultyDTO> expectedTeachers = new ArrayList<>();
+        Mockito.when(teacherRepo.findFacultiesByTeacher(Mockito.any())).thenReturn(FacultyMapper.FACULTY_MAPPER.toListEntity(expectedTeachers));
 
-        List<Faculty> actualTeachers = FacultyMapper.FACULTY_MAPPER.toListEntity(teacherService.getFacultiesByTeacher(teacherDTO));
+        List<FacultyDTO> actualTeachers = teacherService.getFacultiesByTeacher(teacherDTO);
 
         assertEquals(expectedTeachers, actualTeachers);
     }
@@ -78,7 +84,7 @@ public class TeacherServiceTest {
 
     @Test
     void createFalseTest() {
-        Mockito.when(teacherRepo.findByFirstNameAndLastName(Mockito.any())).thenReturn(TeacherMapper.TEACHER_MAPPER.toEntity(teacherDTO));
+        Mockito.when(teacherRepo.save(Mockito.any())).thenReturn(false);
 
         boolean result = teacherService.create(teacherDTO);
 
@@ -112,7 +118,7 @@ public class TeacherServiceTest {
 
     @Test
     void updateFalseTest() {
-        Mockito.when(teacherRepo.findByFirstNameAndLastName(Mockito.any())).thenReturn(null);
+        Mockito.when(teacherRepo.update(Mockito.any())).thenReturn(false);
 
         boolean result = teacherService.update(teacherDTO);
 
@@ -136,7 +142,7 @@ public class TeacherServiceTest {
 
     @Test
     void removeFalseTest() {
-        Mockito.when(teacherRepo.findByID(Mockito.any())).thenReturn(null);
+        Mockito.when(teacherRepo.delete(Mockito.any())).thenReturn(false);
 
         boolean result = teacherService.create(teacherDTO);
 

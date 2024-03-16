@@ -39,34 +39,6 @@ public class StudentRepoImpl implements StudentRepo {
     }
 
     @Override
-    public Student findByFirstNameAndLastName(Student entity) {
-
-        Student student = null;
-
-        String selectQuery = "SELECT * FROM students WHERE first_name = ? AND last_name = ?";
-
-        try (Connection connection = DataSource.getInstance().getConnection()) {
-
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-                preparedStatement.setString(1, entity.getFirstName());
-                preparedStatement.setString(2, entity.getLastName());
-
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-                    student = Student.builder()
-                            .id(resultSet.getInt("id"))
-                            .firstName(resultSet.getString("first_name"))
-                            .lastName(resultSet.getString("last_name"))
-                            .build();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return student;
-    }
-
-    @Override
     public List<Student> findAll() {
 
         List<Student> students = new ArrayList<>();
@@ -95,74 +67,65 @@ public class StudentRepoImpl implements StudentRepo {
     @Override
     public boolean save(Student entity) {
 
-        Student studentFromDB = this.findByFirstNameAndLastName(entity);
-
-        if (studentFromDB != null) {
-            return false;
-        }
+        int count = 0;
 
         String insertQuery = "INSERT INTO students (first_name, last_name, faculty_id) VALUES (?, ?, ?)";
 
         try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement insertPreparedStatement = connection.prepareStatement(insertQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
-            insertPreparedStatement.setString(1, entity.getFirstName());
-            insertPreparedStatement.setString(2, entity.getLastName());
-            insertPreparedStatement.setInt(3, entity.getFacultyId());
-            insertPreparedStatement.executeUpdate();
+            preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.setInt(3, entity.getFacultyId());
+
+            count = preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return true;
+        return count > 0;
     }
 
     @Override
     public boolean update(Student entity) {
 
-        Student studentFromDB = this.findByFirstNameAndLastName(entity);
-
-        if (studentFromDB == null) {
-            return false;
-        }
+        int count = 0;
 
         String updateQuery = "UPDATE students SET first_name=?, last_name=?, faculty_id=? WHERE id=?";
 
         try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement updatePreparedStatement = connection.prepareStatement(updateQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
 
-            updatePreparedStatement.setString(1, entity.getFirstName());
-            updatePreparedStatement.setString(2, entity.getLastName());
-            updatePreparedStatement.setInt(3, entity.getFacultyId());
-            updatePreparedStatement.setInt(4, entity.getId());
-            updatePreparedStatement.executeUpdate();
+            preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.setInt(3, entity.getFacultyId());
+            preparedStatement.setInt(4, entity.getId());
+
+            count = preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return true;
+        return count > 0;
     }
 
     @Override
     public boolean delete(Integer id) {
 
-        Student studentFromDB = this.findByID(id);
-
-        if (studentFromDB != null) {
-            return false;
-        }
+        int count = 0;
 
         String deleteQuery = "DELETE FROM students WHERE id=?";
 
         try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement deletePreparedStatement = connection.prepareStatement(deleteQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
 
-            deletePreparedStatement.setInt(1, id);
-            deletePreparedStatement.executeUpdate();
+            preparedStatement.setInt(1, id);
+
+            count = preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return true;
+        return count > 0;
     }
 }

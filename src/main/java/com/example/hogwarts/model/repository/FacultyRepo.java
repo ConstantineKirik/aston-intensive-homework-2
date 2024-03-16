@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface FacultyRepo extends DefaultRepo<Faculty> {
 
-    Faculty findByTitle(Faculty faculty);
-
     List<Teacher> findTeachersByFaculty(Faculty faculty);
 
     List<Student> findStudentsByFaculty(Faculty faculty);

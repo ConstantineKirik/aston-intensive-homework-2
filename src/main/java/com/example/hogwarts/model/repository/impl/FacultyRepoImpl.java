@@ -40,33 +40,6 @@ public class FacultyRepoImpl implements FacultyRepo {
     }
 
     @Override
-    public Faculty findByTitle(Faculty entity) {
-
-        Faculty faculty = null;
-
-        String selectQuery = "SELECT * FROM faculties WHERE title = ?";
-
-        try (Connection connection = DataSource.getInstance().getConnection()) {
-
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-                preparedStatement.setString(1, entity.getTitle());
-
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-                    resultSet.next();
-                    faculty = Faculty.builder()
-                            .id(resultSet.getInt("id"))
-                            .title(resultSet.getString("title"))
-                            .build();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return faculty;
-    }
-
-    @Override
     public List<Faculty> findAll() {
 
         List<Faculty> faculties = new ArrayList<>();
@@ -155,58 +128,48 @@ public class FacultyRepoImpl implements FacultyRepo {
     @Override
     public boolean save(Faculty entity) {
 
-        Faculty facultyFromDB = this.findByTitle(entity);
-
-        if (facultyFromDB != null) {
-            return false;
-        }
+        int count = 0;
 
         String insertQuery = "INSERT INTO faculties (title) VALUES (?)";
 
         try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement insertPreparedStatement = connection.prepareStatement(insertQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
-            insertPreparedStatement.setString(1, entity.getTitle());
-            insertPreparedStatement.executeUpdate();
+            preparedStatement.setString(1, entity.getTitle());
+
+            count = preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return true;
+        return count > 0;
     }
 
     @Override
     public boolean update(Faculty entity) {
 
-        Faculty facultyFromDB = this.findByTitle(entity);
-
-        if (facultyFromDB == null) {
-            return false;
-        }
+        int count = 0;
 
         String updateQuery = "UPDATE faculties SET title = ? WHERE id = ?";
 
         try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
 
-            statement.setString(1, entity.getTitle());
-            statement.setInt(2, entity.getId());
-            statement.executeUpdate();
+            preparedStatement.setString(1, entity.getTitle());
+            preparedStatement.setInt(2, entity.getId());
+
+            count = preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return true;
+        return count > 0;
     }
 
     @Override
     public boolean delete(Integer id) {
 
-        Faculty facultyFromDB = this.findByID(id);
-
-        if (facultyFromDB == null) {
-            return false;
-        }
+        int count = 0;
 
         String deleteQuery = "DELETE FROM faculties WHERE id = ?";
 
@@ -214,11 +177,12 @@ public class FacultyRepoImpl implements FacultyRepo {
              PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
 
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+
+            count = preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return true;
+        return count > 0;
     }
 }
