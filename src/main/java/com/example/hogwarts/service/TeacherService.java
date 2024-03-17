@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TeacherService extends DefaultService<TeacherDTO> {
 
-    void addTeacherToFaculty(FacultyDTO facultyDTO, TeacherDTO teacherDTO);
+    void addTeacherToFaculty(Integer facultyID, Integer teacherID);
 
     List<FacultyDTO> getFacultiesByTeacher(TeacherDTO teacherDTO);
 }

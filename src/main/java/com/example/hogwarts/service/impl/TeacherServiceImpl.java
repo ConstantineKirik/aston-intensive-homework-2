@@ -5,6 +5,7 @@ import com.example.hogwarts.dto.TeacherDTO;
 import com.example.hogwarts.mapper.FacultyMapper;
 import com.example.hogwarts.mapper.TeacherMapper;
 import com.example.hogwarts.model.repository.TeacherRepo;
+import com.example.hogwarts.model.repository.impl.TeacherRepoImpl;
 import com.example.hogwarts.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 
@@ -36,8 +37,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void addTeacherToFaculty(FacultyDTO facultyDTO, TeacherDTO teacherDTO) {
-        teacherRepo.addTeacherToFaculty(FacultyMapper.FACULTY_MAPPER.toEntity(facultyDTO), TeacherMapper.TEACHER_MAPPER.toEntity(teacherDTO));
+    public void addTeacherToFaculty(Integer facultyID, Integer teacherID) {
+        teacherRepo.addTeacherToFaculty(facultyID, teacherID);
     }
 
     @Override

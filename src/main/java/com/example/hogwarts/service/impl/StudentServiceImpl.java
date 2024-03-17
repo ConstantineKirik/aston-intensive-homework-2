@@ -3,6 +3,7 @@ package com.example.hogwarts.service.impl;
 import com.example.hogwarts.dto.StudentDTO;
 import com.example.hogwarts.mapper.StudentMapper;
 import com.example.hogwarts.model.repository.StudentRepo;
+import com.example.hogwarts.model.repository.impl.StudentRepoImpl;
 import com.example.hogwarts.service.StudentService;
 import lombok.RequiredArgsConstructor;
 

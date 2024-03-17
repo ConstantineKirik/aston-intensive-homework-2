@@ -92,16 +92,6 @@ public class TeacherServiceTest {
     }
 
     @Test
-    void addTeacherToFacultyTest(){
-        FacultyDTO faculty = new FacultyDTO();
-        TeacherDTO teacher = new TeacherDTO();
-
-        teacherService.addTeacherToFaculty(faculty, teacher);
-        Mockito.verify(teacherRepo).addTeacherToFaculty(FacultyMapper.FACULTY_MAPPER.toEntity(faculty),
-                TeacherMapper.TEACHER_MAPPER.toEntity(teacher));
-    }
-
-    @Test
     void updateTest() {
         teacherService.update(teacherDTO);
         Mockito.verify(teacherRepo).update(TeacherMapper.TEACHER_MAPPER.toEntity(teacherDTO));

@@ -9,5 +9,5 @@ public interface TeacherRepo extends DefaultRepo<Teacher> {
 
     List<Faculty> findFacultiesByTeacher(Teacher teacher);
 
-    void addTeacherToFaculty(Faculty faculty, Teacher teacher);
+    void addTeacherToFaculty(Integer facultyID, Integer teacherID);
 }

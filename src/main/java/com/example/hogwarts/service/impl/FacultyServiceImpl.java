@@ -7,11 +7,13 @@ import com.example.hogwarts.mapper.FacultyMapper;
 import com.example.hogwarts.mapper.StudentMapper;
 import com.example.hogwarts.mapper.TeacherMapper;
 import com.example.hogwarts.model.repository.FacultyRepo;
+import com.example.hogwarts.model.repository.impl.FacultyRepoImpl;
 import com.example.hogwarts.service.FacultyService;
 import lombok.RequiredArgsConstructor;
 
 
 import java.util.List;
+
 
 @RequiredArgsConstructor
 public class FacultyServiceImpl implements FacultyService {

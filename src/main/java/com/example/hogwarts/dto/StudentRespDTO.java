@@ -1,4 +1,4 @@
-package com.example.hogwarts.model.entity;
+package com.example.hogwarts.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Student {
+public class StudentRespDTO {
     private Integer id;
     private String firstName;
     private String lastName;
-    private Integer facultyId;
+    private String faculty;
 }

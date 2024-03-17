@@ -3,7 +3,7 @@ package com.example.hogwarts.model.repository.impl;
 import com.example.hogwarts.model.entity.Faculty;
 import com.example.hogwarts.model.entity.Teacher;
 import com.example.hogwarts.model.repository.TeacherRepo;
-import com.example.hogwarts.config.DataSource;
+import com.example.hogwarts.util.DataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -115,19 +115,17 @@ public class TeacherRepoImpl implements TeacherRepo {
     }
 
     @Override
-    public void addTeacherToFaculty(Faculty faculty, Teacher teacher) {
-
-        int count = 0;
+    public void addTeacherToFaculty(Integer facultyID, Integer teacherID) {
 
         String insertQuery = "INSERT INTO faculties_teachers (faculty_id, teacher_id) VALUES (?, ?)";
 
         try (Connection connection = DataSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
-            preparedStatement.setInt(1, faculty.getId());
-            preparedStatement.setInt(2, teacher.getId());
+            preparedStatement.setInt(1, facultyID);
+            preparedStatement.setInt(2, teacherID);
 
-            count = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
